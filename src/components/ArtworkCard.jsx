@@ -1,7 +1,23 @@
 import React from 'react';
+import { getResizedImageUrl } from '../utils/cloudinaryHelper'; // Import your helper
 
 const ArtworkCard = ({ artwork, onClick }) => {
-    const imageSrc = artwork.imageUrl || artwork.url;
+    const rawImageSrc = artwork.imageUrl || artwork.url;
+
+    // Generate optimized sizes on the fly
+    // 1. Smaller width for the blurred background to save bandwidth
+    const backdropSrc = getResizedImageUrl(rawImageSrc, {
+        width: 300,
+        height: 300,
+        crop: 'fill'
+    });
+
+    // 2. Crisp, appropriately sized version for the main display container
+    const mainImageSrc = getResizedImageUrl(rawImageSrc, {
+        width: 800,
+        height: 800,
+        crop: 'fit' // Keeps proportions intact without cropping
+    });
 
     return (
         <div
@@ -10,9 +26,9 @@ const ArtworkCard = ({ artwork, onClick }) => {
             data-cursor-label="VIEW"
             className="group cursor-pointer aspect-square rounded-[var(--radius-md)] sm:rounded-[var(--radius-lg)] overflow-hidden transition-all duration-500 relative bg-[var(--bg-surface)] border border-[var(--ink)]/10 hover:border-[var(--accent-1)]/50 shadow-xl hover:shadow-[0_0_30px_rgba(255,59,92,0.15)] flex items-center justify-center"
         >
-            {/* Ambient Blurred Artwork Backdrop */}
+            {/* Ambient Blurred Artwork Backdrop (Using lightweight resized version) */}
             <img
-                src={imageSrc}
+                src={backdropSrc}
                 alt=""
                 className="absolute inset-0 w-full h-full object-cover blur-2xl opacity-20 scale-125 pointer-events-none transition-opacity duration-500 group-hover:opacity-40"
             />
@@ -20,7 +36,7 @@ const ArtworkCard = ({ artwork, onClick }) => {
             {/* Absolute Bounding Box for Full Image Fit (No Crop) */}
             <div className="absolute inset-0 p-4 sm:p-5 flex items-center justify-center z-10 pointer-events-none overflow-hidden">
                 <img
-                    src={imageSrc}
+                    src={mainImageSrc}
                     alt={artwork.title || 'Artwork'}
                     className="max-w-full max-h-full object-contain group-hover:scale-105 transition-transform duration-500 ease-out drop-shadow-2xl rounded-lg pointer-events-auto"
                     loading="lazy"
