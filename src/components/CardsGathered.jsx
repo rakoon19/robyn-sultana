@@ -1,4 +1,5 @@
-import { useRef } from 'react';
+import { useRef, useMemo } from 'react';
+import { Link } from 'react-router-dom';
 import { ArrowRight, Layers } from '@gravity-ui/icons';
 import { useStaggerReveal } from '../hooks/useGSAP';
 import { getSectionBg } from '../utils/sectionStyles';
@@ -9,12 +10,22 @@ const CardsGathered = () => {
   useStaggerReveal(containerRef);
   const { artworks, loading } = useArtworks();
 
-  const categories = ['original', 'fanart', 'commissions', 'sketches'];
-  const collections = categories.map((cat) => ({
-    id: cat,
-    name: cat.charAt(0).toUpperCase() + cat.slice(1),
-    count: artworks.filter((a) => a.category === cat).length,
-  }));
+  // Dynamically extract unique categories from actual artworks
+  const collections = useMemo(() => {
+    const categoryCounts = artworks.reduce((acc, art) => {
+      if (art.category) {
+        const cat = art.category.toLowerCase();
+        acc[cat] = (acc[cat] || 0) + 1;
+      }
+      return acc;
+    }, {});
+
+    return Object.entries(categoryCounts).map(([cat, count]) => ({
+      id: cat,
+      name: cat.charAt(0).toUpperCase() + cat.slice(1),
+      count,
+    }));
+  }, [artworks]);
 
   if (loading) {
     return (
@@ -48,9 +59,9 @@ const CardsGathered = () => {
           {/* Stacked Cards */}
           <div ref={containerRef} className="space-y-5">
             {collections.map((collection, idx) => (
-                <a
+                <Link
                     key={collection.id}
-                    href={`/gallery?category=${collection.id}`}
+                    to={`/gallery?category=${collection.id}`}
                     data-card
                     data-cursor="hover"
                     className="group relative block p-6 sm:p-8 rounded-[1.5rem] bg-[var(--bg-surface)] border-3 border-[var(--ink)] shadow-[6px_6px_0px_var(--ink)] hover:shadow-[10px_10px_0px_var(--ink)] hover:-translate-y-1 transition-all duration-200"
@@ -74,7 +85,7 @@ const CardsGathered = () => {
                       <ArrowRight size={22} />
                     </div>
                   </div>
-                </a>
+                </Link>
             ))}
           </div>
         </div>
