@@ -1,12 +1,11 @@
 // src/services/api.js
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+const API_URL = import.meta.env.VITE_API_URL;
 
 export const fetchArtworks = async () => {
     try {
-        const res = await fetch(`${API_URL}/artworks`);
+        const res = await fetch(`${API_URL}/api/artworks`);
         if (!res.ok) throw new Error('Failed to fetch artworks');
         const data = await res.json();
-
         // Normalize data (ensures fallback values for Cloudinary helpers & keys)
         return data.map((art) => ({
             ...art,
