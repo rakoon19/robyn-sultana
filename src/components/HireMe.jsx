@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Plus, Minus, Envelope } from '@gravity-ui/icons';
+import { Plus, Minus } from '@gravity-ui/icons';
 
 const HireMe = () => {
   const [openFaq, setOpenFaq] = useState(null);

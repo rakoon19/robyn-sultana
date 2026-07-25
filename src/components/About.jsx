@@ -3,7 +3,7 @@ import { Sparkles, Cpu, Layers, Brush, Star } from '@gravity-ui/icons';
 import { useScrollReveal, createIdleLoop } from '../hooks/useGSAP';
 import { getSectionBg } from '../utils/sectionStyles';
 import { illustratorInfo } from '../config/illustrator';
-import { getResizedImageUrl } from './ArtworkCard';
+import { getResizedImageUrl } from '../utils/cloudinaryHelper.js';
 
 const About = () => {
   const contentRef = useRef(null);

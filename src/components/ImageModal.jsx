@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Xmark, Sparkles } from '@gravity-ui/icons';
-import { getResizedImageUrl } from '../utils/cloudinaryHelper'; // Import your helper
+import { getResizedImageUrl } from '../utils/cloudinaryHelper.js'; // Import your helper
 
 const ImageModal = ({ artwork, onClose }) => {
     useEffect(() => {

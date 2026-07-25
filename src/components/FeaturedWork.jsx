@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Sparkles, ArrowRight } from '@gravity-ui/icons';
 import { SECTION_THEMES } from '../utils/sectionStyles';
 import { useArtworks } from '../hooks/useArtworks';
-import { getResizedImageUrl } from './ArtworkCard'; // Import your resize helper
+import { getResizedImageUrl } from '../utils/cloudinaryHelper.js'; // Import your resize helper
 
 const FeaturedWork = () => {
   const { artworks, loading: isLoading } = useArtworks();
