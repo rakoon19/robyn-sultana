@@ -1,8 +1,40 @@
+// src/components/ArtworkCard.jsx
+
 import React from 'react';
-import { getResizedImageUrl } from '../utils/cloudinaryHelper'; // Import your helper
+
+/**
+ * Helper function to safely inject Cloudinary transformation parameters on the fly.
+ */
+export const getResizedImageUrl = (imageUrl, options = {}) => {
+    if (!imageUrl || typeof imageUrl !== 'string') {
+        return '';
+    }
+
+    const uploadSegment = '/image/upload/';
+    const uploadIndex = imageUrl.indexOf(uploadSegment);
+
+    // If it's not a Cloudinary URL or missing the upload path, return it as-is
+    if (uploadIndex === -1) {
+        return imageUrl;
+    }
+
+    const {
+        width = 'auto',
+        height = 'auto',
+        crop = 'fill',
+        format = 'auto',
+        quality = 'auto'
+    } = options;
+
+    const transformationString = `w_${width},h_${height},c_${crop},f_${format},q_${quality}/`;
+    const insertPosition = uploadIndex + uploadSegment.length;
+
+    // Inject transformations right after /image/upload/
+    return imageUrl.slice(0, insertPosition) + transformationString + imageUrl.slice(insertPosition);
+};
 
 const ArtworkCard = ({ artwork, onClick }) => {
-    const rawImageSrc = artwork.imageUrl || artwork.url;
+    const rawImageSrc = artwork?.imageUrl || artwork?.url || '';
 
     // Generate optimized sizes on the fly
     // 1. Smaller width for the blurred background to save bandwidth
@@ -18,6 +50,10 @@ const ArtworkCard = ({ artwork, onClick }) => {
         height: 800,
         crop: 'fit' // Keeps proportions intact without cropping
     });
+
+    // 👉 Put them right here!
+    console.log("Raw URL:", rawImageSrc);
+    console.log("Resized URL:", mainImageSrc);
 
     return (
         <div
@@ -37,7 +73,7 @@ const ArtworkCard = ({ artwork, onClick }) => {
             <div className="absolute inset-0 p-4 sm:p-5 flex items-center justify-center z-10 pointer-events-none overflow-hidden">
                 <img
                     src={mainImageSrc}
-                    alt={artwork.title || 'Artwork'}
+                    alt={artwork?.title || 'Artwork'}
                     className="max-w-full max-h-full object-contain group-hover:scale-105 transition-transform duration-500 ease-out drop-shadow-2xl rounded-lg pointer-events-auto"
                     loading="lazy"
                 />
@@ -47,9 +83,9 @@ const ArtworkCard = ({ artwork, onClick }) => {
             <div className="absolute inset-0 z-20 bg-gradient-to-t from-[var(--bg-primary)]/90 via-[var(--bg-primary)]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4 sm:p-6 pointer-events-none">
                 <div className="translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
                     <p className="font-display text-sm sm:text-base font-extrabold text-[var(--ink)] line-clamp-1 uppercase tracking-wide">
-                        {artwork.title || 'Untitled Artwork'}
+                        {artwork?.title || 'Untitled Artwork'}
                     </p>
-                    {artwork.category && (
+                    {artwork?.category && (
                         <p className="font-body text-xs text-[var(--accent-1)] uppercase font-semibold tracking-wider mt-0.5">
                             {artwork.category}
                         </p>
