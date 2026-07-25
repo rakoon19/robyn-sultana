@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Xmark, Sparkles } from '@gravity-ui/icons';
-import { getResizedImageUrl } from '../utils/cloudinaryHelper.js'; // Import your helper
+import { getResizedImageUrl } from '../utils/cloudinaryHelper.js';
 
 const ImageModal = ({ artwork, onClose }) => {
     useEffect(() => {
@@ -19,9 +19,9 @@ const ImageModal = ({ artwork, onClose }) => {
 
     if (!artwork) return null;
 
-    const rawImageSrc = artwork.imageUrl || artwork.url;
+    const rawImageSrc = artwork.imageUrl || artwork.url || '';
 
-    // Use a higher resolution (e.g., width 1400) for the popup modal viewer so it looks crisp and detailed
+    // Request an optimized high-resolution version for the modal view on the fly
     const modalImageSrc = getResizedImageUrl(rawImageSrc, {
         width: 1400,
         height: 1400,
@@ -53,6 +53,7 @@ const ImageModal = ({ artwork, onClose }) => {
                         src={modalImageSrc}
                         alt={artwork.title || 'Artwork Details'}
                         className="max-w-full max-h-[75vh] object-contain rounded-md drop-shadow-2xl"
+                        loading="lazy"
                     />
                 </div>
 
@@ -60,9 +61,9 @@ const ImageModal = ({ artwork, onClose }) => {
                 <div className="w-full md:w-80 p-6 sm:p-8 flex flex-col justify-between bg-[var(--bg-surface)] border-t md:border-t-0 md:border-l border-[var(--ink)]/15">
                     <div className="space-y-4">
                         <div>
-              <span className="font-body text-[10px] uppercase font-bold tracking-widest text-[var(--accent-1)] flex items-center gap-1.5">
-                <Sparkles size={10} /> {artwork.category || 'Portfolio Artwork'}
-              </span>
+                            <span className="font-body text-[10px] uppercase font-bold tracking-widest text-[var(--accent-1)] flex items-center gap-1.5">
+                                <Sparkles size={10} /> {artwork.category || 'Portfolio Artwork'}
+                            </span>
                             <h3 className="font-['Futura',sans-serif] font-bold text-xl sm:text-2xl text-[var(--ink)] uppercase tracking-wide mt-1">
                                 {artwork.title || 'Untitled'}
                             </h3>
@@ -76,18 +77,18 @@ const ImageModal = ({ artwork, onClose }) => {
                     </div>
 
                     <div className="pt-6 border-t border-[var(--ink)]/10 mt-6 flex items-center justify-between font-body text-xs font-semibold text-[var(--ink-muted)] uppercase tracking-wider">
-            <span>
-              {artwork.createdAt || artwork.date
-                  ? new Date(artwork.createdAt || artwork.date).toLocaleDateString(undefined, {
-                      year: 'numeric',
-                      month: 'short',
-                      day: 'numeric',
-                  })
-                  : 'Selected Work'}
-            </span>
+                        <span>
+                            {artwork.createdAt || artwork.date
+                                ? new Date(artwork.createdAt || artwork.date).toLocaleDateString(undefined, {
+                                    year: 'numeric',
+                                    month: 'short',
+                                    day: 'numeric',
+                                })
+                                : 'Selected Work'}
+                        </span>
                         <span className="text-[var(--accent-2)] font-bold inline-flex items-center gap-1">
-              <Sparkles size={12} /> High Res
-            </span>
+                            <Sparkles size={12} /> High Res
+                        </span>
                     </div>
                 </div>
             </div>
