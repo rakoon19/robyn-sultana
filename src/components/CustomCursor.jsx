@@ -5,12 +5,19 @@ const CustomCursor = () => {
     const innerDotRef = useRef(null);
     const outerRingRef = useRef(null);
     const cursorStateRef = useRef({ x: 0, y: 0, size: 14, state: 'default' });
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const isTouch = window.matchMedia('(pointer: coarse)').matches;
 
     useEffect(() => {
-        if (prefersReducedMotion || isTouch) return;
 
+        const shouldHideCursor =
+            typeof window !== "undefined" &&
+            (
+                window.matchMedia("(pointer: coarse)").matches ||
+                window.matchMedia("(prefers-reduced-motion: reduce)").matches
+            );
+
+        if (shouldHideCursor) {
+            return;
+        }
         const innerDot = innerDotRef.current;
         const outerRing = outerRingRef.current;
         if (!innerDot || !outerRing) return;
@@ -32,7 +39,12 @@ const CustomCursor = () => {
         };
 
         const handleElementHover = (e) => {
-            const target = e.target.closest('[data-cursor], a, button, [role="button"], input, textarea');
+            const target =
+                e.target instanceof Element
+                    ? e.target.closest(
+                        '[data-cursor], a, button, [role="button"], input, textarea'
+                    )
+                    : null;
             if (!target) return;
 
             let newSize = 14;
@@ -114,17 +126,16 @@ const CustomCursor = () => {
         };
 
         document.addEventListener('mousemove', handleMouseMove);
-        document.addEventListener('mouseenter', handleElementHover, true);
-        document.addEventListener('mouseleave', handleElementLeave, true);
+        document.addEventListener('mouseover', handleElementHover, true);
+        document.addEventListener('mouseout', handleElementLeave, true);
 
         return () => {
             document.removeEventListener('mousemove', handleMouseMove);
-            document.removeEventListener('mouseenter', handleElementHover, true);
-            document.removeEventListener('mouseleave', handleElementLeave, true);
+            document.removeEventListener('mouseover', handleElementHover, true);
+            document.removeEventListener('mouseout', handleElementLeave, true);
         };
-    }, [prefersReducedMotion, isTouch]);
+    }, []);
 
-    if (prefersReducedMotion || isTouch) return null;
 
     return (
         <>
