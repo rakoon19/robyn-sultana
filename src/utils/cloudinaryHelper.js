@@ -16,6 +16,6 @@ export const getResizedImageUrl = (imageUrl, options = {}) => {
     const uploadSegment = '/image/upload/';
     const uploadIndex = imageUrl.indexOf(uploadSegment) + uploadSegment.length;
 
-    // Injects the resize parameters right into the URL string on the fly
+    // This is what injects the transformation string right after /image/upload/
     return imageUrl.slice(0, uploadIndex) + transformations + '/' + imageUrl.slice(uploadIndex);
 };
