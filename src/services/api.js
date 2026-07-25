@@ -6,7 +6,8 @@ export const fetchArtworks = async () => {
         const res = await fetch(`${API_URL}/api/artworks`);
         if (!res.ok) throw new Error('Failed to fetch artworks');
         const data = await res.json();
-        // Normalize data (ensures fallback values for Cloudinary helpers & keys)
+
+        // Fix: Spread (...art) first so imageUrl and other fields are retained!
         return data.map((art) => ({
             ...art,
             id: art._id || art.id,
