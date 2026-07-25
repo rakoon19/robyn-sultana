@@ -11,24 +11,28 @@ const Footer = () => {
         {
             label: "Discord",
             href: illustratorInfo.socials.discord || "#",
+            icon: "/assets/pngwing.com.png",
             rotation: "-rotate-4",
             bg: "bg-amber-300"
         },
         {
             label: "Twitter",
             href: illustratorInfo.socials.twitter,
+            icon: "/assets/tiktok-logo.svg", // adjust icon asset as needed
             rotation: "rotate-3",
             bg: "bg-cyan-300"
         },
         {
             label: "Instagram",
             href: illustratorInfo.socials.instagram,
+            icon: "/assets/instagram-logo.svg",
             rotation: "-rotate-2",
             bg: "bg-rose-300"
         },
         {
-            label: "YouTube",
-            href: illustratorInfo.socials.youtube || "#",
+            label: "Pixiv",
+            href: illustratorInfo.socials.pixiv || "#",
+            icon: "/assets/pixiv-seeklogo.png",
             rotation: "rotate-5",
             bg: "bg-purple-300"
         },
@@ -82,7 +86,7 @@ const Footer = () => {
                         </div>
                     </div>
 
-                    {/* Cute Text-Only Social Sticker Cards */}
+                    {/* Cute Social Logo Sticker Cards */}
                     <div className="flex flex-col justify-between gap-4 bg-[var(--bg-surface)] text-[var(--ink)] p-6 sm:p-8 rounded-[2rem] border-3 border-[var(--ink)] shadow-[6px_6px_0px_var(--ink)] transition-colors">
                         <p className="font-body text-[var(--ink)] text-xs uppercase tracking-widest font-black flex items-center gap-2">
                             <Sparkles className="w-3.5 h-3.5" /> Follow My Chaos <Sparkles className="w-3.5 h-3.5" />
@@ -96,11 +100,16 @@ const Footer = () => {
                                     href={social.href}
                                     target="_blank"
                                     rel="noopener noreferrer"
+                                    aria-label={social.label}
                                     className={`group flex items-center justify-center p-4 rounded-2xl ${social.bg} border-3 border-[var(--ink)] text-black shadow-[4px_4px_0px_var(--ink)] hover:-translate-y-3 hover:shadow-[6px_8px_0px_var(--ink)] hover:rotate-6 transition-all duration-200 ${social.rotation}`}
                                 >
-                                    <span className="font-['Futura',sans-serif] text-xs font-black uppercase tracking-wider group-hover:scale-110 transition-transform duration-200">
-                                        {social.label}
-                                    </span>
+                                    <div className="w-7 h-7 flex items-center justify-center overflow-hidden">
+                                        <img
+                                            src={social.icon}
+                                            alt={social.label}
+                                            className="w-full h-full object-contain filter brightness-0 group-hover:scale-110 transition-transform duration-200"
+                                        />
+                                    </div>
                                 </a>
                             ))}
                         </div>

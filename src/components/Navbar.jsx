@@ -21,10 +21,11 @@ const Navbar = () => {
     ];
 
     const socialLinks = [
-        { href: illustratorInfo.socials.instagram, label: "Instagram" },
-        { href: illustratorInfo.socials.twitter, label: "Twitter" },
-        { href: illustratorInfo.socials.pixiv, label: "Pixiv" },
-        { href: illustratorInfo.socials.kofi, label: "Ko-fi" },
+        { href: illustratorInfo.socials.instagram, label: "Instagram", icon: "/assets/instagram-logo.svg" },
+        { href: illustratorInfo.socials.twitter, label: "Twitter", icon: "/assets/tiktok-logo.svg" }, // adjust or add proper twitter icon asset if available
+        { href: illustratorInfo.socials.pixiv, label: "Pixiv", icon: "/assets/pixiv-seeklogo.png" },
+        { href: illustratorInfo.socials.discord, label: "Discord", icon: "/assets/pngwing.com.png" },
+        { href: illustratorInfo.socials.kofi, label: "Ko-fi", icon: "/assets/ko-fi-icon.svg" },
     ];
 
     const getActiveIndex = useCallback(() => {
@@ -212,16 +213,21 @@ const Navbar = () => {
                         <p className="font-body text-[var(--ink)] text-xs uppercase tracking-widest mb-3 px-2 font-black">
                             Connect
                         </p>
-                        <div className="flex gap-3">
+                        <div className="flex gap-3 flex-wrap">
                             {socialLinks.map((social, index) => (
                                 <a
                                     key={index}
                                     href={social.href}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="w-11 h-11 rounded-xl bg-rose-300 border-2 border-[var(--ink)] text-black hover:bg-[var(--ink)] hover:text-[var(--bg-primary)] transition-all flex items-center justify-center text-xs font-black shadow-[2px_2px_0px_var(--ink)]"
+                                    aria-label={social.label}
+                                    className="w-11 h-11 rounded-xl bg-rose-300 border-2 border-[var(--ink)] text-black hover:bg-[var(--ink)] hover:text-[var(--bg-primary)] transition-all flex items-center justify-center shadow-[2px_2px_0px_var(--ink)] overflow-hidden p-2"
                                 >
-                                    {social.label.charAt(0)}
+                                    <img
+                                        src={social.icon}
+                                        alt={social.label}
+                                        className="w-full h-full object-contain filter brightness-0 hover:invert transition-all"
+                                    />
                                 </a>
                             ))}
                         </div>
