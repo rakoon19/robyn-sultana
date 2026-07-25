@@ -3,12 +3,12 @@ import { Link } from 'react-router-dom';
 import { Sparkles, ArrowRight } from '@gravity-ui/icons';
 import { SECTION_THEMES } from '../utils/sectionStyles';
 import { useArtworks } from '../hooks/useArtworks';
+import { getResizedImageUrl } from './ArtworkCard'; // Import your resize helper
 
 const FeaturedWork = () => {
   const { artworks, loading: isLoading } = useArtworks();
   const theme = SECTION_THEMES.featured;
 
-  // Automatically filter or slice the first 2 artworks from the fetched API data
   const displayArtworks = artworks.length > 0
       ? artworks.filter(art => art.isFeatured || art.featured).length > 0
           ? artworks.filter(art => art.isFeatured || art.featured)
@@ -33,7 +33,6 @@ const FeaturedWork = () => {
             </p>
           </div>
 
-          {/* 1. Loading State */}
           {isLoading && (
               <div className="grid md:grid-cols-2 gap-8">
                 {[1, 2].map((n) => (
@@ -46,7 +45,6 @@ const FeaturedWork = () => {
               </div>
           )}
 
-          {/* 2. Empty State */}
           {!isLoading && displayArtworks.length === 0 && (
               <div className="bg-[var(--bg-surface)] p-12 rounded-[2rem] border-3 border-[var(--ink)] shadow-[6px_6px_0px_var(--ink)] text-center">
                 <p className="text-[var(--ink-muted)] font-['Futura',sans-serif] font-black text-xl uppercase tracking-wider mb-4">
@@ -61,11 +59,13 @@ const FeaturedWork = () => {
               </div>
           )}
 
-          {/* 3. Rendered Backend Artworks using the API hook */}
           {!isLoading && displayArtworks.length > 0 && (
               <div className="grid md:grid-cols-2 gap-8">
                 {displayArtworks.map((art, idx) => {
-                  const imageSrc = art.image || art.imageUrl || art.cover || art.url;
+                  const rawImageSrc = art.image || art.imageUrl || art.cover || art.url;
+                  // Resize featured image to appropriate dimensions
+                  const imageSrc = getResizedImageUrl(rawImageSrc, { width: 900, height: 700, crop: 'fill' });
+
                   return (
                       <div
                           key={art._id || art.id || idx}

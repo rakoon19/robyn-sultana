@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { Xmark, Sparkles } from '@gravity-ui/icons';
+import { getResizedImageUrl } from '../utils/cloudinaryHelper'; // Import your helper
 
 const ImageModal = ({ artwork, onClose }) => {
     useEffect(() => {
@@ -18,7 +19,14 @@ const ImageModal = ({ artwork, onClose }) => {
 
     if (!artwork) return null;
 
-    const imageSrc = artwork.imageUrl || artwork.url;
+    const rawImageSrc = artwork.imageUrl || artwork.url;
+
+    // Use a higher resolution (e.g., width 1400) for the popup modal viewer so it looks crisp and detailed
+    const modalImageSrc = getResizedImageUrl(rawImageSrc, {
+        width: 1400,
+        height: 1400,
+        crop: 'fit'
+    });
 
     return (
         <div
@@ -42,7 +50,7 @@ const ImageModal = ({ artwork, onClose }) => {
                 {/* Artwork Display Container */}
                 <div className="flex-1 bg-[var(--bg-primary)]/50 p-6 flex items-center justify-center min-h-[300px] md:min-h-[500px] relative overflow-hidden">
                     <img
-                        src={imageSrc}
+                        src={modalImageSrc}
                         alt={artwork.title || 'Artwork Details'}
                         className="max-w-full max-h-[75vh] object-contain rounded-md drop-shadow-2xl"
                     />
